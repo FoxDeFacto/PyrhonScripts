@@ -1,7 +1,6 @@
 import os
 import platform
 import sys
-import pip
 from subprocess import check_output
 
 def get_system_info():
