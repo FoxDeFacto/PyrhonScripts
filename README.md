@@ -17,6 +17,19 @@ Tento skript poskytuje detailní informace o systému, instalaci Pythonu a nains
 #### Použití:
 - Spuštěním skriptu získáte informace o vašem systému a Python prostředí.
 
+### 3. Jednoduchá kalkulačka
+Tento skript poskytuje jednoduchou kalkulačku s grafickým uživatelským rozhraním (GUI) vytvořenou pomocí knihoven `tkinter` a `ttk`. Kalkulačka umožňuje provádět základní matematické operace, jako je sčítání, odčítání, násobení a dělení, a také pokročilé funkce jako závorky a mocniny.
+
+#### Funkce:
+- Základní matematické operace: sčítání, odčítání, násobení, dělení.
+- Pokročilé funkce: závorky `(`, `)`, exponentace `^`.
+- Moderní vzhled pomocí `ttk` pro lepší uživatelský zážitek.
+
+#### Použití:
+- Pro spuštění skriptu je potřeba mít nainstalovaný Python.
+- Skript spustíte příkazem:
+
+
 ## Jak začít
 
 1. Klonujte tento repozitář do svého počítače:
