@@ -3,3 +3,4 @@ beautifulsoup4
 pygame
 icalendar 
 pytz
+python-dotenv

@@ -4,6 +4,9 @@ from icalendar import Calendar, Event
 from datetime import datetime, timedelta
 import pytz
 import re
+import getpass
+import os
+from dotenv import load_dotenv
 
 def format_description(description):
     # Replace multiple spaces with a single space
@@ -45,11 +48,16 @@ def fetch_timetable_html(session):
     
     # Step 3: Fetch the timetable page after login
     response = session.get(timetable_url)
+    print(f"Timetable page status code: {response.status_code}")
+    print(f"Timetable page URL: {response.url}")
+    
     if response.status_code == 200 and 'muj-rozvrh' in response.url:
         print("Timetable page accessed successfully.")
+        print(f"Content length: {len(response.text)} characters")
         return response.text
     else:
         print("Failed to access the timetable page.")
+        print(f"Response content: {response.text[:500]}...")  # Print first 500 characters
         return None
 
 def parse_timetable(html):
@@ -79,8 +87,14 @@ def parse_timetable(html):
 
     # Loop through rows in the timetable table
     for row in table.find_all('tr')[1:]:
-        day = row.find('th').text.strip().lower()
+        th = row.find('th')
+        if th is None:
+            print(f"Warning: No 'th' element found in row: {row}")
+            continue
+        
+        day = th.text.strip().lower()
         if day not in days:
+            print(f"Warning: Unrecognized day '{day}' found")
             continue
         day_index = days.index(day)
 
@@ -89,13 +103,19 @@ def parse_timetable(html):
                 event = cell.find('b')
                 if event:
                     subject = event.text.strip()
-                    details = cell.find('small').text.strip() if cell.find('small') else 'No details'
+                    details_elem = cell.find('small')
+                    details = details_elem.text.strip() if details_elem else 'No details'
 
-                     # Format the details using the format_description function
+                    # Format the details using the format_description function
                     formatted_details = format_description(details)
 
                     start_time = time_slots[i]
-                    end_time = end_times[i + int(cell['colspan']) - 1]  # Capture the end time for the last slot
+                    end_index = i + int(cell['colspan']) - 1
+                    if end_index < len(end_times):
+                        end_time = end_times[end_index]
+                    else:
+                        print(f"Warning: End time index out of range for event: {subject}")
+                        end_time = end_times[-1]  # Use the last available end time
                     
                     events.append({
                         'subject': subject,
@@ -134,7 +154,19 @@ def generate_ical(events):
 
     return cal.to_ical()
 
-def main(username, password):
+def main():
+    load_dotenv()  # Load environment variables from .env file
+
+    # Try to get credentials from environment variables
+    username = os.getenv('VSPJ_USERNAME')
+    password = os.getenv('VSPJ_PASSWORD')
+
+    # If credentials are not in environment variables, prompt the user
+    if not username:
+        username = input("Enter your username: ")
+    if not password:
+        password = getpass.getpass("Enter your password: ")
+
     session = requests.Session()
 
     # Step 1: Login to the VSPJ system
@@ -160,6 +192,4 @@ def main(username, password):
         print("Login failed.")
 
 if __name__ == "__main__":
-    username = input("Enter your username: ")
-    password = input("Enter your password: ")
-    main(username, password)
+    main()
