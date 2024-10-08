@@ -40,6 +40,14 @@ Tento skript představuje klasickou hru Hangman (Šibenice), kde hráč hádá p
 - 6 životů na uhádnutí slova.
 - Hra se ovládá zadáváním písmen přes konzoli.
 
+### 6. VSPJ Timetable Scraping Script
+
+Tento Python skript se přihlásí do informačního systému VŠPJ, získá uživatelův rozvrh a vygeneruje soubor iCalendar (.ics) s událostmi pro snadný import do kalendářových aplikací.
+
+## Funkce
+- Přihlášení do studentského portálu VŠPJ pomocí vašich přihlašovacích údajů.
+- Získání a zpracování dat rozvrhu.
+- Generování souboru .ics pro snadný import do kalendáře.
 
 
 ## Jak začít
@@ -64,5 +72,5 @@ Tento skript představuje klasickou hru Hangman (Šibenice), kde hráč hádá p
 
 ## Požadavky
 
-- Python 3.6 nebo novější
+- Python 3.7 nebo novější
 - Knihovny uvedené v souboru `requirements.txt`
